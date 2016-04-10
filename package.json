@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/wilcofiers/json-ld-store#readme",
   "dependencies": {
+    "eventmap": "^2.1.0",
     "jsonld": "^0.4.6"
   },
   "devDependencies": {
