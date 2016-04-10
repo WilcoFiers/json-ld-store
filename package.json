@@ -1,0 +1,24 @@
+{
+  "name": "json-ld-store",
+  "version": "0.1.0",
+  "description": "an interface for processing JSON-LD",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wilcofiers/json-ld-store.git"
+  },
+  "keywords": [
+    "JSON-LD",
+    "JSON",
+    "Linked-data"
+  ],
+  "author": "Wilco Fiers",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wilcofiers/json-ld-store/issues"
+  },
+  "homepage": "https://github.com/wilcofiers/json-ld-store#readme"
+}
