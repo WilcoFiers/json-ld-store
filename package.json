@@ -25,7 +25,8 @@
   "homepage": "https://github.com/wilcofiers/json-ld-store#readme",
   "dependencies": {
     "eventmap": "^2.1.0",
-    "jsonld": "^0.4.6"
+    "jsonld": "^0.4.6",
+    "uuid": "^2.0.2"
   },
   "devDependencies": {
     "babel-core": "^6.7.6",

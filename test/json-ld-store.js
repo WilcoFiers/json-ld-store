@@ -12,11 +12,13 @@ describe('jsonLdStore init', () => {
     });
 
     it('returns a store', () => {
-    	let myStore = ldStore.init({});
-    	assert.isFunction(myStore.get);
-    	assert.isFunction(myStore.add);
-    	assert.isFunction(myStore.remove);
-    	assert.isFunction(myStore.import);
+        let myStore = ldStore.init({});
+
+        ['add', 'remove', 'getById',
+            'getByType', 'import'
+        ].forEach((method) => {
+           assert.isFunction(myStore[method]);
+        });
     });
 
     it('has a frozen copy of the context', function () {
