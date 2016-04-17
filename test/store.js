@@ -26,6 +26,21 @@ describe('jsonLdStore', () => {
 	});
 
 	describe('store.add(obj)', function () {
+		let dylan, builder;
+		beforeEach(function () {
+			dylan = {
+				[TYPE]: 'Person',
+				[ID]: '_:dylan',
+				name: 'Bob Dylan'
+			};
+			builder = {
+				[TYPE]: 'Person',
+				[ID]: '_:builder',
+				name: 'Bob Builder',
+				knows: dylan
+			};
+		});
+
 		it('adds an object to the map', function () {
 			let obj = {
 				[TYPE]: 'Person',
@@ -72,22 +87,23 @@ describe('jsonLdStore', () => {
 		});
 
 		it('creates a bi-directional reference to it\'s properties', function () {
-			refMap
-			let dylan = {
-				[TYPE]: 'Person',
-				[ID]: '_:dylan',
-				name: 'Bob Dylan'
-			};
-			let builder = {
-				[TYPE]: 'Person',
-				[ID]: '_:builder',
-				name: 'Bob Builder',
-				knows: dylan
-			};
-
 			testStore.add(dylan);
 			testStore.add(builder);
+			assert.isObject(refMap['_:builder']);
+			assert.include(refMap['_:dylan'].knownBy, builder);
+			assert.include(refMap['_:builder'].knows, dylan);
+		});
 
+		it('can take an array of new objects', function () {
+			testStore.add([builder, dylan]);
+			assert.isObject(refMap['_:builder']);
+			assert.include(refMap['_:dylan'].knownBy, builder);
+			assert.include(refMap['_:builder'].knows, dylan);
+		});
+
+		it('can take multiple arguments', function () {
+			testStore.add(builder, dylan);
+			assert.isObject(refMap['_:builder']);
 			assert.include(refMap['_:dylan'].knownBy, builder);
 			assert.include(refMap['_:builder'].knows, dylan);
 		});
@@ -185,4 +201,52 @@ describe('jsonLdStore', () => {
 			assert.notEqual(astin.likes[0], walker);
 		});
 	});
+
+	describe('store.update(obj)', function () {
+		let hurr, button;
+		beforeEach(function () {
+			hurr = {
+				[TYPE]: 'Person',
+				[ID]: '_:hurr',
+				name: 'Ben Hurr'
+			};
+			button = {
+				[TYPE]: 'Person',
+				[ID]: '_:button',
+				name: 'Ben Button',
+				watched: hurr
+			};
+
+			testStore.add(hurr);
+			testStore.add(button);
+		});
+
+		it('adds new bi-directional relation to the refMap', function () {
+			assert.lengthOf(refMap['_:hurr'].knows, 0);
+			assert.lengthOf(refMap['_:button'].knownBy, 0);
+
+			hurr.inspired = button;
+			testStore.update(hurr);
+
+			assert.lengthOf(refMap['_:hurr'].knows, 1);
+			assert.lengthOf(refMap['_:button'].knownBy, 1);
+			assert.include(refMap['_:hurr'].knows, button);
+			assert.include(refMap['_:button'].knownBy, hurr);
+		});
+
+		it('removes outdated references', function () {
+			assert.lengthOf(refMap['_:button'].knows, 1);
+			assert.lengthOf(refMap['_:hurr'].knownBy, 1);
+			assert.include(refMap['_:button'].knows, hurr);
+			assert.include(refMap['_:hurr'].knownBy, button);
+			assert.equal(button.watched, hurr);
+
+			delete button.watched;
+			testStore.update(button);
+
+			assert.lengthOf(refMap['_:button'].knows, 0);
+			assert.lengthOf(refMap['_:hurr'].knownBy, 0);
+		});
+	});
+
 });
