@@ -6,22 +6,31 @@ const storeImport = require('../lib/import');
 const createStore = require('../lib/store');
 
 describe('import', function () {
-	let refMap, testStore, context, rambo;
+	let refMap, testStore, context,
+	rambo, stallone;
 
 	let shouldNotCall = ((e) => { throw e; });
 
 	beforeEach(function () {
 		context = {
 			'@vocab': 'http://schema.org',
-			schema: 'http://schema.org'
+			schema: 'http://schema.org',
+			'played': {'@type': '@#id'}
 		};
 		refMap = {};
 		testStore = createStore(refMap, context);
 		rambo = {
 			'@context': context,
+			'@id': '_:rambo',
 			'@type': 'Person',
 			'name': 'John Rambo'
 		};
+		stallone = {
+			'@context': context,
+			'@type': 'Person',
+			'name': 'Sylvester Stallone',
+			'played': '_:rambo'
+		}
 	});
 
 	it('takes a store and JSON-LD data as arguments', function () {
@@ -57,7 +66,6 @@ describe('import', function () {
 			assert.equal(persons[0].name, 'John Rambo');
 			assert.lengthOf(persons[0]['@type'], 1);
 			assert.equal(persons[0]['@type'][0], 'Person');
-
 			done();
 		})
 		.catch(shouldNotCall);

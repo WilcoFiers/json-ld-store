@@ -9,12 +9,15 @@ const ID = '@id';
 
 describe('jsonLdStore', () => {
 	let testStore, refMap, context;
+	let typeIsId = {'@type': '@id'};
 
 	// set up a ldStore
 	beforeEach(function () {
 		context = {
 			'@vocab': 'http://schema.org',
-			sch: 'http://schema.org'
+			sch: 'http://schema.org',
+			likes: typeIsId,
+			fanboys: typeIsId
 		};
 		refMap = {};
 		testStore = createStore(refMap, context);
@@ -37,7 +40,7 @@ describe('jsonLdStore', () => {
 				[TYPE]: 'Person',
 				[ID]: '_:builder',
 				name: 'Bob Builder',
-				knows: dylan
+				likes: dylan
 			};
 		});
 
@@ -107,6 +110,19 @@ describe('jsonLdStore', () => {
 			assert.include(refMap['_:dylan'].knownBy, builder);
 			assert.include(refMap['_:builder'].knows, dylan);
 		});
+
+		it('identifies IDs to other objects and substitutes them', function () {
+			builder.likes = [dylan[ID]];
+			builder.fanboys = dylan[ID];
+
+			testStore.add(builder, dylan);
+			assert.lengthOf(builder.likes, 1);
+			assert.equal(builder.likes[0], dylan);
+			assert.equal(builder.fanboys, dylan);
+		});
+
+		it('replaces ID refs with the actual object once it is added');
+
 	});
 
 	describe('store.getById(id)', function () {
