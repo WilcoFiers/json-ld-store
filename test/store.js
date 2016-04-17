@@ -1,8 +1,8 @@
 /* global describe, it */
 'use strict';
 
-let assert = require('chai').assert;
-let createStore = require('../lib/store');
+const assert = require('chai').assert;
+const createStore = require('../lib/store');
 const TYPE = '@type';
 const ID = '@id';
 
@@ -68,10 +68,10 @@ describe('jsonLdStore', () => {
 				name: 'Bob Dylan'
 			};
 			testStore.add(obj);
-			assert.throw(() => {
+			assert.throws(() => {
 				obj[TYPE] = 'Something else';
 			});
-			assert.throw(() => {
+			assert.throws(() => {
 				obj[ID] = 'Something else'
 			});
 		});

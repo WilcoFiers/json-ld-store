@@ -1,8 +1,8 @@
 /* global describe, it */
 'use strict';
 
-let assert = require('chai').assert;
-let ldStore = require('../lib/json-ld-store');
+const assert = require('chai').assert;
+const ldStore = require('../lib/json-ld-store');
 
 describe('jsonLdStore init', () => {
 
