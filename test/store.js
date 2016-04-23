@@ -121,7 +121,17 @@ describe('jsonLdStore', () => {
 			assert.equal(builder.fanboys, dylan);
 		});
 
-		it('replaces ID refs with the actual object once it is added');
+		it('replaces ID refs with the actual object once it is added', function () {
+			builder.likes = [dylan[ID]];
+			builder.fanboys = dylan[ID];
+
+			testStore.add(builder);
+			assert.lengthOf(builder.likes, 1);
+			assert.equal(builder.likes[0], dylan[ID]);
+
+			testStore.add(dylan);
+			assert.equal(builder.likes[0], dylan);
+		});
 
 	});
 
