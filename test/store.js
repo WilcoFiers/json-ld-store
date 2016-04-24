@@ -28,6 +28,16 @@ describe('jsonLdStore', () => {
 		assert.equal(myStore.context, context);
 	});
 
+	it('understands overriding @id');
+
+	it('understands overriding @type');
+
+	it('understands overriding @graph');
+
+	it('converts reverse relationships');
+
+	it('sets up reverse relationships defined in @context');
+
 	describe('store.add(obj)', function () {
 		let dylan, builder;
 		beforeEach(function () {
@@ -132,6 +142,8 @@ describe('jsonLdStore', () => {
 			testStore.add(dylan);
 			assert.equal(builder.likes[0], dylan);
 		});
+
+		it('inserts reverse relationships')
 
 	});
 
